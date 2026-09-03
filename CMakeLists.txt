@@ -3,10 +3,8 @@ project(database)
 
 set(CMAKE_CXX_STANDARD 26)
 
-find_package(Boost REQUIRED COMPONENTS system filesystem thread)
-
-include_directories(.)
+find_package(Boost REQUIRED COMPONENTS algorithm)
 
 add_executable(database main.cpp)
 
-target_link_libraries(database PRIVATE Boost::system Boost::filesystem Boost::thread)
+target_link_libraries(database PRIVATE Boost::algorithm)
