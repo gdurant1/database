@@ -111,6 +111,7 @@ int main() {
         "POSET\n" << endl;
         string line;
         getline(cin, line);
+        uppercaseify(line);
         stringstream ss(line);
         string first, second, third, fourth, fifth;
         ss >> first;
@@ -120,17 +121,19 @@ int main() {
         if (first == "CREATE") {
             string keyword, id;
             ss >> keyword;
-            if (keyword != "TABLE" || keyword != "table" ) {die();};
+            if (keyword != "TABLE" ) {die();};
             ss >> id;
             if (id.empty()) {die();};
-            uppercaseify(id);
             is_valid(id);
             if (inventories.table_exists(id)) {die();};
             Inventory new_inv(id);
             inventories.insert(new_inv);
         } //END CREATE
         else if (first == "INSERT") {
-            //YOU
+            string keyword1 , id, keyword2;
+            ss >> keyword1, keyword2;
+            if (keyword1 != "INTO" && keyword2 != "VALUES") {die();};
+
         } //END INSERT
         else if (first == "SELECT") {
             //YOU
