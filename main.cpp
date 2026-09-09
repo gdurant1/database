@@ -25,7 +25,7 @@ void die() {
 //use after uppercaseify
 bool is_valid(const string &str) {
     for (char ch : str) {
-        if (!isupper(ch) && !isalnum(static_cast<unsigned char>(ch))) {
+        if (!isalnum(static_cast<unsigned char>(ch))) {
             die();
         }
     }
@@ -75,6 +75,10 @@ public:
     Inventory* search(string name, bool ignore_fail = false) {
         return nullptr; //STUB
     }
+
+    bool table_exists(string id) {
+        set.find(id) != set.end();
+    }
     //Prints all inventories in all tables
     void print_all() {
         //YOU
@@ -111,10 +115,19 @@ int main() {
         string first, second, third, fourth, fifth;
         ss >> first;
         trim(first); //split and trim are two functions badly needed in std
-        if (first.size() < 1) break;
+        if (first.empty()) break;
         if (!cin) break;
         if (first == "CREATE") {
-            //YOU
+            string keyword, id;
+            ss >> keyword;
+            if (keyword != "TABLE" || keyword != "table" ) {die();};
+            ss >> id;
+            if (id.empty()) {die();};
+            uppercaseify(id);
+            is_valid(id);
+            if (inventories.table_exists(id)) {die();};
+            Inventory new_inv(id);
+            inventories.insert(new_inv);
         } //END CREATE
         else if (first == "INSERT") {
             //YOU
