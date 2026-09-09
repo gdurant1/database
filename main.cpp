@@ -25,7 +25,7 @@ void die() {
 //use after uppercaseify
 bool is_valid(const string &str) {
     for (char ch : str) {
-        if (!isalnum(static_cast<unsigned char>(ch))) {
+        if (!isupper(ch) && !isalnum(static_cast<unsigned char>(ch))) {
             die();
         }
     }
@@ -98,6 +98,13 @@ ostream& operator<<(ostream &outs, Inventory &other) {
 
 int main() {
     while (!cin.eof()) {
+        cout << "CREATE TABLE <ID>\n"
+        "INSERT INTO <ID> VALUES <VIN>, <VIN>, <VIN>,...\n"
+        "SELECT FROM <ID1> UNION <ID2>\n"
+        "SELECT * FROM *\n"
+        "SELECT * FROM <ID1> INNER JOIN <ID2>\n"
+        "IS <ID1> SUBSET <ID2>\n"
+        "POSET\n" << endl;
         string line;
         getline(cin, line);
         stringstream ss(line);
