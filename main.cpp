@@ -3,6 +3,8 @@
 #include <vector>
 #include <cctype>
 #include <cstdlib>
+#include <unordered_map>
+#include <unordered_set>
 #include <boost/algorithm/string/trim.hpp>
 using namespace boost;
 using namespace std;
@@ -21,11 +23,11 @@ void die() {
 }
 
 class Inventory {
-    vector<string> cars = {};
+    vector< string> cars = {};
     string name = "";
 public:
     Inventory(string new_name) {
-        //YOU
+        name = new_name;
     }
     bool is_in(string search) {
         //YOU
@@ -53,7 +55,7 @@ public:
 }; //End of inventory
 
 class SuperSet {
-    vector<Inventory> set;
+    unordered_map<Inventory, > set;
 public:
     SuperSet() : set() {}
     void insert(Inventory &new_inv) {
