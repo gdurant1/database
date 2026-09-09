@@ -22,6 +22,16 @@ void die() {
     exit(EXIT_FAILURE);
 }
 
+//use after uppercaseify
+bool is_valid(const string &str) {
+    for (char ch : str) {
+        if (!isalnum(static_cast<unsigned char>(ch))) {
+            die();
+        }
+    }
+    return true;
+}
+
 class Inventory {
     vector< string> cars = {};
     string name = "";
@@ -55,7 +65,7 @@ public:
 }; //End of inventory
 
 class SuperSet {
-    unordered_map<Inventory, > set;
+    unordered_map<string, Inventory> set;
 public:
     SuperSet() : set() {}
     void insert(Inventory &new_inv) {
