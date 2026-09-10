@@ -226,7 +226,7 @@ int main() {
             }
         } //END ID
         else if (first == "POSET") {
-            //YOU
+            inventories.poset();
         } //END POSET
         else {
             DEBUG(cout << "COMMAND NOT RECOGNIZED: " << first << endl);
