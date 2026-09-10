@@ -36,24 +36,37 @@ class Inventory {
     vector< string> cars = {};
     string name = "";
 public:
-    Inventory(string new_name) {
+    Inventory(string new_name) {//
         name = new_name;
     }
     bool is_in(string search) {
-        //YOU
+        for (const string &car : cars) {
+            if (car == search) return true;
+        }
         return false; //Stub
     }
 
     void insert(string new_car) {
-        //YOU
+        if (!is_in(new_car)) {
+            cars.push_back(new_car);
+        }
     }
     Inventory intersect(const Inventory &other) {
-        //YOU
-        return Inventory("Delete This Line and replace with actual code"); //Stub
+        Inventory new_inv(name + " INTERSECT " + other.name);
+        for (const string &car : cars) {
+            if (cars == other.cars) {
+                new_inv.insert(car);
+                break;
+            }
+        }
+        return new_inv;
+
     }
     Inventory unionize(const Inventory &other) {
-        //YOU
-        return Inventory("This also isn't functioning code, so don't leave it in"); //Stub
+        Inventory new_union(name + " UNION " + other.name);
+        for (const string &car : cars) new_union.insert(car);
+        for (const string &car : other.cars) new_union.insert(car);
+        return new_union; //Stub
     }
     int size() {
         return cars.size();
@@ -70,6 +83,7 @@ class SuperSet {
 public:
     SuperSet() : set() {}
     void insert(Inventory &new_inv) {
+        cars.insert(cars.begin(), new_inv.get_name());
     }
     //It will return the inventory matching name
     //If ignore_fail is set, then it won't die on a lack of a match
@@ -142,12 +156,12 @@ int main() {
             Inventory *target = inventories.search(name);
             getline(ss, line);
             stringstream cars(line);
-            string token;
-            while (getline(cars, token, ',')) {
-                trim(token);
-                if (inventories.search(token, true) == nullptr)  break;
-                target -> insert(token);
-                inventories.insert(token);
+            string car;
+            while (getline(cars, car, ',')) {
+                trim(car);
+                if (inventories.search(car, true) == nullptr)  break;
+                target -> insert(car);
+                inventories.insert(car);
             }
         } //END INSERT
         else if (first == "SELECT") {
