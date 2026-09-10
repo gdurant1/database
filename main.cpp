@@ -60,8 +60,8 @@ public:
             }
         }
         return result;
-
     }
+
     Inventory unionize(const Inventory &other) {
         Inventory result(name + " UNION " + other.name);
         for (const string &car : cars) result.insert(car);
@@ -104,10 +104,23 @@ public:
     void print_all() {
         for (const auto &pair : set) {
             cout << pair.first << ": " << pair.second << "\n" << endl;
-             //total = total.unionize(*inv);
+
         }
     }
-    void poset() { //Do the partial ordering of the sets here
+    void poset() {
+        for (size_t i =0; i< set.size(); i++) {
+            for (size_t j =0; j < set.size(); j++) {
+                if (i == j) continue;
+                Inventory *a = search(set[i].get_name(), true);
+                Inventory *b = search(set[j].get_name(), true);
+                if (a->size() < b->size()) {
+                    Inventory result = a->intersect(*b);
+                    if (result.size() == a->size()) {
+                        cout << set[i] << " " << set[j] << "\n" << endl;
+                    }
+                }
+            }
+        }
     }
 } inventories;
 
