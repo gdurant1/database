@@ -25,9 +25,8 @@ void die() {
 //use after uppercaseify
 bool is_valid(const string &str) {
     for (char ch : str) {
-        if (!isalnum(static_cast<unsigned char>(ch))) {
-            die();
-        }
+        if (!isalnum(static_cast<unsigned char>(ch))) die();
+
     }
     return true;
 }
@@ -83,20 +82,30 @@ class SuperSet {
 public:
     SuperSet() : set() {}
     void insert(Inventory &new_inv) {
-        cars.insert(cars.begin(), new_inv.get_name());
+        string name = new_inv.get_name();
+        if (set.find(name) == set.end()) {
+            set.insert(make_pair(name, new_inv));
+        }
     }
     //It will return the inventory matching name
     //If ignore_fail is set, then it won't die on a lack of a match
     Inventory* search(string name, bool ignore_fail = false) {
-        auto it = set.find(name);
-        if (it != set.end()) {
-            return &it->second;
+        auto find = set.find(name);
+        if (find != set.end()) {
+            return &find->second;  }
+        if (!ignore_fail) {
+            die();
         }
+
         return nullptr;
     }
     //Prints all inventories in all tables
     void print_all() {
-        //YOU
+        for (const string &name : set) {
+            Inventory *inv = search(name, true);
+            cout << name << ": " << *inv << "\n";
+             //total = total.unionize(*inv);
+        }
     }
     void poset() { //Do the partial ordering of the sets here
     }
@@ -105,13 +114,19 @@ public:
 //This should read from an instream, parse the input and add the vins to other
 //You don't need to write this if you don't want.
 istream& operator>>(istream &ins, Inventory &other) {
-    //YOU
+    string car;
+    if (!car.empty()) {
+        other.insert(car);
+    }
     return ins;
 }
 
 //This should output an invntory to outs
 ostream& operator<<(ostream &outs, Inventory &other) {
-    //YOU
+    for (size_t i = 0; i < other.cars.size(); i++) {
+        outs << other.cars[i] << " ";
+        if (i +1 < other.cars.size()) {outs << ", "; }
+    }
     return outs;
 }
 
