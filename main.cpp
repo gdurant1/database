@@ -43,6 +43,7 @@ public:
         //YOU
         return false; //Stub
     }
+
     void insert(string new_car) {
         //YOU
     }
@@ -73,11 +74,11 @@ public:
     //It will return the inventory matching name
     //If ignore_fail is set, then it won't die on a lack of a match
     Inventory* search(string name, bool ignore_fail = false) {
-        return nullptr; //STUB
-    }
-
-    bool table_exists(string id) {
-        set.find(id) != set.end();
+        auto it = set.find(name);
+        if (it != set.end()) {
+            return &it->second;
+        }
+        return nullptr;
     }
     //Prints all inventories in all tables
     void print_all() {
@@ -102,12 +103,12 @@ ostream& operator<<(ostream &outs, Inventory &other) {
 
 int main() {
     while (!cin.eof()) {
-        cout << "CREATE TABLE <ID>\n"
-        "INSERT INTO <ID> VALUES <VIN>, <VIN>, <VIN>,...\n"
-        "SELECT FROM <ID1> UNION <ID2>\n"
+        cout << "CREATE TABLE <NAME>\n"
+        "INSERT INTO <NAME> VALUES <VIN>, <VIN>, <VIN>,...\n"
+        "SELECT FROM <NAME1> UNION <NAME2>\n"
         "SELECT * FROM *\n"
-        "SELECT * FROM <ID1> INNER JOIN <ID2>\n"
-        "IS <ID1> SUBSET <ID2>\n"
+        "SELECT * FROM <NAME1> INNER JOIN <NAME2>\n"
+        "IS <NAME1> SUBSET <NAME2>\n"
         "POSET\n" << endl;
         string line;
         getline(cin, line);
@@ -119,21 +120,35 @@ int main() {
         if (first.empty()) break;
         if (!cin) break;
         if (first == "CREATE") {
-            string keyword, id;
+            string keyword, name;
             ss >> keyword;
-            if (keyword != "TABLE" ) {die();};
-            ss >> id;
-            if (id.empty()) {die();};
-            is_valid(id);
-            if (inventories.table_exists(id)) {die();};
-            Inventory new_inv(id);
+            if (keyword != "TABLE" ) break;
+            ss >> name;
+            if (name.empty()) break;
+            is_valid(name);
+            if (inventories.search(name, true) == nullptr) break;
+            Inventory new_inv(name);
             inventories.insert(new_inv);
         } //END CREATE
         else if (first == "INSERT") {
-            string keyword1 , id, keyword2;
-            ss >> keyword1, keyword2;
-            if (keyword1 != "INTO" && keyword2 != "VALUES") {die();};
-
+            string keyword1 , name, keyword2;
+            ss >> keyword1;
+            if (keyword1 != "INTO") break;
+            ss >> name;
+            if (name.empty()) break;
+            if (inventories.search(name, true) == nullptr) break;
+            ss >> keyword2;
+            if (keyword2 != "VALUES") break;
+            Inventory *target = inventories.search(name);
+            getline(ss, line);
+            stringstream cars(line);
+            string token;
+            while (getline(cars, token, ',')) {
+                trim(token);
+                if (inventories.search(token, true) == nullptr)  break;
+                target -> insert(token);
+                inventories.insert(token);
+            }
         } //END INSERT
         else if (first == "SELECT") {
             //YOU
