@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <unordered_map>
 #include <unordered_set>
+#include <ostream>
 #include <boost/algorithm/string/trim.hpp>
 using namespace boost;
 using namespace std;
@@ -212,7 +213,17 @@ int main() {
             else die();
         } //END SELECT
         else if (first == "IS") {
-            //YOU
+            string name1, keyword, name2;
+            ss >> name1 >> keyword >> name2;
+            if (name1.empty() || keyword != "SUBSET" || name2.empty())  die();
+            Inventory *a = inventories.search(name1);
+            Inventory *b = inventories.search(name2);
+            Inventory result = a->intersect(*b);
+            if (result.size() == a->size()) {
+                cout << "true" << endl; }
+            else {
+                cout << "false" << endl;
+            }
         } //END ID
         else if (first == "POSET") {
             //YOU
