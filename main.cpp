@@ -204,8 +204,12 @@ int main() {
                     string name1 = start_name, keyword1, keyword2, name2;
                     ss >> keyword1 >> keyword2 >> name2;
                     if (keyword1 != "INNER" || keyword2 != "JOIN" || name2.empty())die();
+                    Inventory *a = inventories.search(start_name);
+                    Inventory *b = inventories.search(name2);
+                    cout << a->intersect(*b) << "\n" << endl;
                 }
             }
+            else die();
         } //END SELECT
         else if (first == "IS") {
             //YOU
