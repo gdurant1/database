@@ -101,9 +101,8 @@ public:
     }
     //Prints all inventories in all tables
     void print_all() {
-        for (const string &name : set) {
-            Inventory *inv = search(name, true);
-            cout << name << ": " << *inv << "\n";
+        for (const auto &pair : set) {
+            cout << pair.first << ": " << pair.second << "\n" << endl;
              //total = total.unionize(*inv);
         }
     }
@@ -151,9 +150,9 @@ int main() {
         if (first == "CREATE") {
             string keyword, name;
             ss >> keyword;
-            if (keyword != "TABLE" ) break;
+            if (keyword != "TABLE" ) die();
             ss >> name;
-            if (name.empty()) break;
+            if (name.empty()) die();
             is_valid(name);
             if (inventories.search(name, true) == nullptr) break;
             Inventory new_inv(name);
@@ -162,25 +161,51 @@ int main() {
         else if (first == "INSERT") {
             string keyword1 , name, keyword2;
             ss >> keyword1;
-            if (keyword1 != "INTO") break;
+            if (keyword1 != "INTO") die();
             ss >> name;
-            if (name.empty()) break;
-            if (inventories.search(name, true) == nullptr) break;
+            if (name.empty()) die();
+            if (inventories.search(name, true) == nullptr) die();
             ss >> keyword2;
-            if (keyword2 != "VALUES") break;
+            if (keyword2 != "VALUES") die();
             Inventory *target = inventories.search(name);
             getline(ss, line);
             stringstream cars(line);
             string car;
             while (getline(cars, car, ',')) {
                 trim(car);
+                if (car.empty()) die();
+                is_valid(car);
                 if (inventories.search(car, true) == nullptr)  break;
                 target -> insert(car);
                 inventories.insert(car);
             }
         } //END INSERT
         else if (first == "SELECT") {
-            //YOU
+            ss >> second;
+            if (second == "FROM") {
+                string name1, keyword, name2;
+                ss >> name1 >> keyword >> name2;
+                if (name1.empty() || keyword == "UNION" || name2.empty()) die();
+                inventories.search(name1);
+                inventories.search(name2);
+                Inventory *a = inventories.search(name1);
+                Inventory *b = inventories.search(name2);
+                cout << a->unionize(*b) << endl;
+            }
+            else if (second == "*") {
+                string keyword;
+                ss >> keyword;
+                if (keyword != "FROM")die();
+                string start_name;
+                ss >> start_name;
+                if (start_name == "*") {
+                    inventories.poset(); }
+                else {
+                    string name1 = start_name, keyword1, keyword2, name2;
+                    ss >> keyword1 >> keyword2 >> name2;
+                    if (keyword1 != "INNER" || keyword2 != "JOIN" || name2.empty())die();
+                }
+            }
         } //END SELECT
         else if (first == "IS") {
             //YOU
