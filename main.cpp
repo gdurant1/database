@@ -54,9 +54,8 @@ public:
     Inventory intersect(const Inventory &other) {
         Inventory result(name + " INTERSECT " + other.name);
         for (const string &car : cars) {
-            if (cars == other.cars) {
+            if (other.cars.find(car) != other.cars.end()) {
                 result.insert(car);
-                break;
             }
         }
         return result;
@@ -220,7 +219,7 @@ int main() {
                     if (keyword1 != "INNER" || keyword2 != "JOIN" || name2.empty())die();
                     Inventory *a = inventories.search(start_name);
                     Inventory *b = inventories.search(name2);
-                    cout << a->intersect(*b) << "\n" << endl;
+                    cout << a->intersect() << "\n" << endl;
                 }
             }
             else die();
