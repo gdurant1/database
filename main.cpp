@@ -51,21 +51,21 @@ public:
         }
     }
     Inventory intersect(const Inventory &other) {
-        Inventory new_inv(name + " INTERSECT " + other.name);
+        Inventory result(name + " INTERSECT " + other.name);
         for (const string &car : cars) {
             if (cars == other.cars) {
-                new_inv.insert(car);
+                result.insert(car);
                 break;
             }
         }
-        return new_inv;
+        return result;
 
     }
     Inventory unionize(const Inventory &other) {
-        Inventory new_union(name + " UNION " + other.name);
-        for (const string &car : cars) new_union.insert(car);
-        for (const string &car : other.cars) new_union.insert(car);
-        return new_union; //Stub
+        Inventory result(name + " UNION " + other.name);
+        for (const string &car : cars) result.insert(car);
+        for (const string &car : other.cars) result.insert(car);
+        return result; //Stub
     }
     int size() {
         return cars.size();
@@ -159,8 +159,6 @@ int main() {
             Inventory new_inv(name);
             inventories.insert(new_inv);
         } //END CREATE
-        for (const string &car : cars) result.insert(car);
-        for (const string &car : other.cars) result.insert(car);
         else if (first == "INSERT") {
             string keyword1 , name, keyword2;
             ss >> keyword1;
