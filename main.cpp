@@ -159,6 +159,8 @@ int main() {
             Inventory new_inv(name);
             inventories.insert(new_inv);
         } //END CREATE
+        for (const string &car : cars) result.insert(car);
+        for (const string &car : other.cars) result.insert(car);
         else if (first == "INSERT") {
             string keyword1 , name, keyword2;
             ss >> keyword1;
