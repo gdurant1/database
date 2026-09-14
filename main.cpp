@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <ostream>
+#include <algorithm>
 #include <boost/algorithm/string/trim.hpp>
 using namespace boost;
 using namespace std;
@@ -32,8 +33,16 @@ bool is_valid(const string &str) {
     return true;
 }
 
+
+struct point {
+    int a, b;
+    friend ostream& operator<<(ostream &outs, point &p) {
+        return outs << "(" << p.a << ", " << p.b << ")";
+    }
+};
+
 class Inventory {
-    vector< string> cars = {};
+    vector<string> cars = {};
     string name = "";
 public:
     Inventory(string new_name) {//
@@ -54,7 +63,7 @@ public:
     Inventory intersect(const Inventory &other) {
         Inventory result(name + " INTERSECT " + other.name);
         for (const string &car : cars) {
-            if (other.cars.find(car) != other.cars.end()) {
+            if (find(other.cars.begin(), other.cars.end(), car) != other.cars.end()) {
                 result.insert(car);
             }
         }
@@ -128,7 +137,7 @@ public:
 istream& operator>>(istream &ins, Inventory &other) {
     string car;
     if (!car.empty()) {
-        other.insert(car);
+        other.
     }
     return ins;
 }
