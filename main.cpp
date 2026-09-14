@@ -43,24 +43,25 @@ struct point {
 
 class Inventory {
     vector<string> cars = {};
-    string name = "";
+    string name;
+
 public:
-    Inventory(string new_name) {//
+    Inventory(const string& new_name) {//
         name = new_name;
     }
-    bool is_in(string search) {
+    bool is_in(const string& search) {
         for (const string &car : cars) {
             if (car == search) return true;
         }
         return false; //Stub
     }
 
-    void insert(string new_car) {
+    void insert(const string& new_car) {
         if (!is_in(new_car)) {
             cars.push_back(new_car);
         }
     }
-    Inventory intersect(const Inventory &other) {
+    Inventory intersect(const Inventory& other) {
         Inventory result(name + " INTERSECT " + other.name);
         for (const string &car : cars) {
             if (find(other.cars.begin(), other.cars.end(), car) != other.cars.end()) {
@@ -79,6 +80,7 @@ public:
     int size() {
         return cars.size();
     }
+
     string get_name() {
         return name;
     }
@@ -116,18 +118,19 @@ public:
         }
     }
     void poset() {
-        for (size_t i =0; i< set.size(); i++) {
-            for (size_t j =0; j < set.size(); j++) {
-                if (i == j) continue;
-                Inventory *a = search(set[i].get_name(), true);
-                Inventory *b = search(set[j].get_name(), true);
+        for (auto &i : set) {
+            for (auto &j : set) {
+                if (i.first == j.first) {continue;}
+                Inventory *a = &i.second;
+                Inventory *b = &j.second;
                 if (a->size() < b->size()) {
                     Inventory result = a->intersect(*b);
                     if (result.size() == a->size()) {
-                        cout << set[i] << " " << set[j] << "\n" << endl;
+                        cout << i.second << " " << j.second << endl;
                     }
                 }
             }
+
         }
     }
 } inventories;
@@ -137,7 +140,7 @@ public:
 istream& operator>>(istream &ins, Inventory &other) {
     string car;
     if (!car.empty()) {
-        other.
+        other.insert(car);
     }
     return ins;
 }
@@ -228,7 +231,7 @@ int main() {
                     if (keyword1 != "INNER" || keyword2 != "JOIN" || name2.empty())die();
                     Inventory *a = inventories.search(start_name);
                     Inventory *b = inventories.search(name2);
-                    cout << a->intersect() << "\n" << endl;
+                    cout << a->intersect(*b) << "\n" << endl;
                 }
             }
             else die();
