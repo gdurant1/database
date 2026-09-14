@@ -145,7 +145,7 @@ istream& operator>>(istream &ins, Inventory &other) {
     return ins;
 }
 
-//This should output an invntory to outs
+//This should output an inventory to outs
 ostream& operator<<(ostream &outs, Inventory &other) {
     for (size_t i = 0; i < other.cars.size(); i++) {
         outs << other.cars[i] << " ";
@@ -179,7 +179,7 @@ int main() {
             ss >> name;
             if (name.empty()) die();
             is_valid(name);
-            if (inventories.search(name, true) == nullptr) break;
+            if (inventories.search(name, true) != nullptr) die();
             Inventory new_inv(name);
             inventories.insert(new_inv);
         } //END CREATE
@@ -189,7 +189,7 @@ int main() {
             if (keyword1 != "INTO") die();
             ss >> name;
             if (name.empty()) die();
-            if (inventories.search(name, true) == nullptr) die();
+            if (inventories.search(name, true) != nullptr) die();
             ss >> keyword2;
             if (keyword2 != "VALUES") die();
             Inventory *target = inventories.search(name);
@@ -200,9 +200,8 @@ int main() {
                 trim(car);
                 if (car.empty()) die();
                 is_valid(car);
-                if (inventories.search(car, true) == nullptr)  break;
+                if (inventories.search(car, true) == nullptr)  die();
                 target -> insert(car);
-                inventories.insert(car);
             }
         } //END INSERT
         else if (first == "SELECT") {
@@ -210,7 +209,7 @@ int main() {
             if (second == "FROM") {
                 string name1, keyword, name2;
                 ss >> name1 >> keyword >> name2;
-                if (name1.empty() || keyword == "UNION" || name2.empty()) die();
+                if (name1.empty() || keyword != "UNION" || name2.empty()) die();
                 inventories.search(name1);
                 inventories.search(name2);
                 Inventory *a = inventories.search(name1);
