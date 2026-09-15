@@ -41,6 +41,15 @@ struct point {
     }
 };
 
+// //This should output an inventory to outs
+// ostream& operator<<(ostream &outs, Inventory &other) {
+//     for (size_t i = 0; i < other.cars.size(); i++) {
+//         outs << other.cars[i] << " ";
+//         if (i +1 < other.cars.size()) {outs << ", "; }
+//     }
+//     return outs;
+// }
+
 class Inventory {
     vector<string> cars = {};
     string name;
@@ -112,11 +121,11 @@ public:
     }
     //Prints all inventories in all tables
     void print_all() {
-        for (const auto &pair : set) {
-            cout << pair.first << ": " << pair.second << "\n" << endl;
-
+        for (auto it = set.begin(); it != set.end(); ++it) {
+            cout << "SET: " << it->first << ", VIN: " << it->second << "\n";
         }
     }
+
     void poset() {
         for (auto &i : set) {
             for (auto &j : set) {
@@ -145,14 +154,6 @@ istream& operator>>(istream &ins, Inventory &other) {
     return ins;
 }
 
-//This should output an inventory to outs
-ostream& operator<<(ostream &outs, Inventory &other) {
-    for (size_t i = 0; i < other.cars.size(); i++) {
-        outs << other.cars[i] << " ";
-        if (i +1 < other.cars.size()) {outs << ", "; }
-    }
-    return outs;
-}
 
 int main() {
     while (!cin.eof()) {
@@ -210,25 +211,23 @@ int main() {
                 string name1, keyword, name2;
                 ss >> name1 >> keyword >> name2;
                 if (name1.empty() || keyword != "UNION" || name2.empty()) die();
-                inventories.search(name1);
-                inventories.search(name2);
                 Inventory *a = inventories.search(name1);
                 Inventory *b = inventories.search(name2);
-                cout << a->unionize(*b) << endl;
+                cout << a->unionize(*b) << "\n" << endl;
             }
             else if (second == "*") {
                 string keyword;
                 ss >> keyword;
                 if (keyword != "FROM")die();
-                string start_name;
-                ss >> start_name;
-                if (start_name == "*") {
+                string star_name;
+                ss >> star_name;
+                if (star_name == "*") {
                     inventories.poset(); }
                 else {
-                    string name1 = start_name, keyword1, keyword2, name2;
+                    string name1, keyword1, keyword2, name2;
                     ss >> keyword1 >> keyword2 >> name2;
                     if (keyword1 != "INNER" || keyword2 != "JOIN" || name2.empty())die();
-                    Inventory *a = inventories.search(start_name);
+                    Inventory *a = inventories.search(star_name);
                     Inventory *b = inventories.search(name2);
                     cout << a->intersect(*b) << "\n" << endl;
                 }
