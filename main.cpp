@@ -107,7 +107,7 @@ public:
         return name;
     }
     friend istream& operator>>(istream &ins, Inventory &other);
-    friend ostream& operator<<(ostream &outs, Inventory &other);
+    // friend ostream& operator<<(ostream &outs, Inventory &other);
 }; //End of inventory
 
 class SuperSet {
@@ -168,14 +168,15 @@ istream& operator>>(istream &ins, Inventory &other) {
 }
 
 int main() {
+    cout << "CREATE TABLE <NAME>\n"
+     "INSERT INTO <NAME> VALUES <VIN>, <VIN>, <VIN>,...\n"
+     "SELECT FROM <NAME1> UNION <NAME2>\n"
+     "SELECT * FROM *\n"
+     "SELECT * FROM <NAME1> INNER JOIN <NAME2>\n"
+     "IS <NAME1> SUBSET <NAME2>\n"
+     "POSET\n" << endl;
+
     while (!cin.eof()) {
-        cout << "CREATE TABLE <NAME>\n"
-        "INSERT INTO <NAME> VALUES <VIN>, <VIN>, <VIN>,...\n"
-        "SELECT FROM <NAME1> UNION <NAME2>\n"
-        "SELECT * FROM *\n"
-        "SELECT * FROM <NAME1> INNER JOIN <NAME2>\n"
-        "IS <NAME1> SUBSET <NAME2>\n"
-        "POSET\n" << endl;
         string line;
         getline(cin, line);
         uppercaseify(line);
