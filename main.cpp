@@ -8,6 +8,7 @@
 #include <ostream>
 #include <algorithm>
 #include <boost/algorithm/string/trim.hpp>
+class Inventory;
 using namespace boost;
 using namespace std;
 
@@ -33,22 +34,24 @@ bool is_valid(const string &str) {
     return true;
 }
 
+  struct point {
+  string a, b;
+     friend ostream& operator<<(ostream &outs, const point &p) {
+          return outs << "(" << p.a << ", " << p.b << ")";
+     }
+ };
 
-struct point {
-    int a, b;
-    friend ostream& operator<<(ostream &outs, point &p) {
-        return outs << "(" << p.a << ", " << p.b << ")";
-    }
-};
-
-// //This should output an inventory to outs
-// ostream& operator<<(ostream &outs, Inventory &other) {
-//     for (size_t i = 0; i < other.cars.size(); i++) {
-//         outs << other.cars[i] << " ";
-//         if (i +1 < other.cars.size()) {outs << ", "; }
+// struct print {
+//     friend ostream& operator<<(ostream &outs, const Inventory &inv) {
+//         outs << inv.name << ": ";
+//         for (auto i = inv.cars.begin(); i != inv.cars.end(); ++i) {
+//             outs << *i << " ";
+//         }
+//         return outs;
 //     }
-//     return outs;
-// }
+// };
+
+
 
 class Inventory {
     vector<string> cars = {};
@@ -58,6 +61,15 @@ public:
     Inventory(const string& new_name) {//
         name = new_name;
     }
+
+    friend ostream& operator<<(ostream &outs, const Inventory &inv) {
+        outs << inv.name << ": ";
+        for (auto i = inv.cars.begin(); i != inv.cars.end(); ++i) {
+            outs << *i << " ";
+        }
+        return outs;
+    }
+
     bool is_in(const string& search) {
         for (const string &car : cars) {
             if (car == search) return true;
@@ -70,6 +82,7 @@ public:
             cars.push_back(new_car);
         }
     }
+
     Inventory intersect(const Inventory& other) {
         Inventory result(name + " INTERSECT " + other.name);
         for (const string &car : cars) {
@@ -121,8 +134,8 @@ public:
     }
     //Prints all inventories in all tables
     void print_all() {
-        for (auto it = set.begin(); it != set.end(); ++it) {
-            cout << "SET: " << it->first << ", VIN: " << it->second << "\n";
+        for (auto i = set.begin(); i != set.end(); ++i) {
+            cout << "SET: " << i->first << ", VIN: " << i->second << "\n";
         }
     }
 
@@ -213,7 +226,7 @@ int main() {
                 if (name1.empty() || keyword != "UNION" || name2.empty()) die();
                 Inventory *a = inventories.search(name1);
                 Inventory *b = inventories.search(name2);
-                cout << a->unionize(*b) << "\n" << endl;
+                cout << a->unionize(*b) << "\n";
             }
             else if (second == "*") {
                 string keyword;
@@ -229,7 +242,7 @@ int main() {
                     if (keyword1 != "INNER" || keyword2 != "JOIN" || name2.empty())die();
                     Inventory *a = inventories.search(star_name);
                     Inventory *b = inventories.search(name2);
-                    cout << a->intersect(*b) << "\n" << endl;
+                   // cout << a->intersect(*b) << "\n";
                 }
             }
             else die();
