@@ -203,7 +203,7 @@ int main() {
             if (keyword1 != "INTO") die();
             ss >> name;
             if (name.empty()) die();
-            if (inventories.search(name, true) != nullptr) die();
+            if (inventories.search(name, true) == nullptr) die();
             ss >> keyword2;
             if (keyword2 != "VALUES") die();
             Inventory *target = inventories.search(name);
@@ -214,7 +214,7 @@ int main() {
                 trim(car);
                 if (car.empty()) die();
                 is_valid(car);
-                if (inventories.search(car, true) == nullptr)  die();
+                //if (inventories.search(car, true) != nullptr)  die();
                 target -> insert(car);
             }
         } //END INSERT
