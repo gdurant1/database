@@ -167,7 +167,6 @@ istream& operator>>(istream &ins, Inventory &other) {
     return ins;
 }
 
-
 int main() {
     while (!cin.eof()) {
         cout << "CREATE TABLE <NAME>\n"
