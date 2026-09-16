@@ -63,9 +63,8 @@ public:
     }
 
     friend ostream& operator<<(ostream &outs, const Inventory &inv) {
-        outs << inv.name << ": ";
         for (auto i = inv.cars.begin(); i != inv.cars.end(); ++i) {
-            outs << *i << " ";
+            outs << *i << ", ";
         }
         return outs;
     }
@@ -136,10 +135,12 @@ public:
 
         return nullptr;
     }
+
     //Prints all inventories in all tables
     void print_all() {
         for (auto i = set.begin(); i != set.end(); ++i) {
-            cout << "SET: " << i->first << ", VIN: " << i->second << "\n";
+            if ( i->second.size() == 0) continue;
+            cout << i->first << ": " << i->second << "\n";
         }
     }
 
@@ -245,7 +246,7 @@ int main() {
                 string star_name;
                 ss >> star_name;
                 if (star_name == "*") {
-                    inventories.poset(); }
+                    inventories.print_all(); }
                 else {
                     string name1, keyword1, keyword2, name2;
                     ss >> keyword1 >> keyword2 >> name2;
