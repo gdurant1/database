@@ -135,6 +135,14 @@ public:
         set.at("MASTER").insert(car);
     }
 
+    int master_size() {
+        int count = 0;
+        for (const auto &i : set) {
+            count ++;
+        }
+        return count;
+    }
+
     //Prints all inventories in all tables
     void print_all() {
         for (auto i = set.begin(); i != set.end(); ++i) {
@@ -142,7 +150,7 @@ public:
             if ( i->second.size() == 0) continue;
             cout << i->first << ": " << i->second << "\n";
         }
-        cout << set.at("MASTER").size() << endl;
+        cout << master_size() << endl;
     }
 
     void poset() {
