@@ -121,7 +121,7 @@ public:
     //It will return the inventory matching name
     //If ignore_fail is set, then it won't die on a lack of a match
     Inventory* search(string name, bool ignore_fail = false) {
-        if (name == "MASTER") die();
+        // if (name == "MASTER") die();
         auto find = set.find(name);
         if (find != set.end()) {
             return &find->second;  }
@@ -131,9 +131,14 @@ public:
         return nullptr;
     }
 
+    void list_all(const string &car) {
+        set.at("MASTER").insert(car);
+    }
+
     //Prints all inventories in all tables
     void print_all() {
         for (auto i = set.begin(); i != set.end(); ++i) {
+            if (i->first == "MASTER") continue;
             if ( i->second.size() == 0) continue;
             cout << i->first << ": " << i->second << "\n";
         }
@@ -143,10 +148,11 @@ public:
     void poset() {
         for (auto &i : set) {
             for (auto &j : set) {
-                if (i.first == j.first) continue;
+                if (i.first == j.first ) continue;
                 Inventory *a = &i.second;
                 Inventory *b = &j.second;
                 if (a->size() == 0 || b->size() == 0) continue;
+                if (i.first == "MASTER" || j.first == "MASTER") continue;
                 if (a->size() < b->size()) {
                     Inventory result = a->intersect(*b);
                     if (result.size() == a->size()) {
@@ -163,9 +169,7 @@ public:
 //You don't need to write this if you don't want.
 istream& operator>>(istream &ins, Inventory &other) {
     string car;
-    if (!car.empty()) {
         other.insert(car);
-    }
     return ins;
 }
 
@@ -190,9 +194,8 @@ int main() {
         if (!cin) break;
         if (first == "CREATE") {
             string keyword, name;
-            ss >> keyword;
+            ss >> keyword >> name;
             if (keyword != "TABLE" ) die();
-            ss >> name;
             if (name.empty()) die();
             is_valid(name);
             if (inventories.search(name, true) != nullptr) die();
@@ -201,9 +204,8 @@ int main() {
         } //END CREATE
         else if (first == "INSERT") {
             string keyword1 , name, keyword2;
-            ss >> keyword1 >> keyword2;
+            ss >> keyword1 >> name >> keyword2;
             if (keyword1 != "INTO" || keyword2 != "VALUES") die();
-            ss >> name;
             if (name.empty()) die();
             if (inventories.search(name, true) == nullptr) die();
             Inventory *target = inventories.search(name);
@@ -215,7 +217,8 @@ int main() {
                 if (car.empty()) die();
                 is_valid(car);
                 if (inventories.search(car, true) == nullptr) {
-                    target -> insert(car); }
+                    target -> insert(car);
+                    inventories.list_all(car);}
                 else {
                     Inventory *table = inventories.search(car);
                     for (const string &new_car : table->get_cars()) {
