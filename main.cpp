@@ -29,17 +29,16 @@ void die() {
 bool is_valid(const string &str) {
     for (char ch : str) {
         if (!isalnum(static_cast<unsigned char>(ch))) die();
-
     }
     return true;
 }
 
-  struct point {
-  string a, b;
-     friend ostream& operator<<(ostream &outs, const point &p) {
-          return outs << "(" << p.a << ", " << p.b << ")";
-     }
- };
+ //  struct point {
+ //  string a, b;
+ //     friend ostream& operator<<(ostream &outs, const point &p) {
+ //          return outs << "(" << p.a << ", " << p.b << ")";
+ //     }
+ // };
 
 class Inventory {
     vector<string> cars = {};
@@ -104,7 +103,10 @@ public:
 class SuperSet {
     unordered_map<string, Inventory> set;
 public:
-    SuperSet() : set() {}
+    SuperSet() : set() {
+        Inventory unique_cars("MASTER");
+        set.insert(make_pair("MASTER", unique_cars));
+    }
 
     void insert(Inventory &new_inv) {
         string name = new_inv.get_name();
@@ -112,9 +114,14 @@ public:
             set.insert(make_pair(name, new_inv));
         }
     }
+
+    int size() {
+        return set.size();
+    }
     //It will return the inventory matching name
     //If ignore_fail is set, then it won't die on a lack of a match
     Inventory* search(string name, bool ignore_fail = false) {
+        if (name == "MASTER") die();
         auto find = set.find(name);
         if (find != set.end()) {
             return &find->second;  }
@@ -130,6 +137,7 @@ public:
             if ( i->second.size() == 0) continue;
             cout << i->first << ": " << i->second << "\n";
         }
+        cout << set.at("MASTER").size() << endl;
     }
 
     void poset() {
@@ -193,13 +201,11 @@ int main() {
         } //END CREATE
         else if (first == "INSERT") {
             string keyword1 , name, keyword2;
-            ss >> keyword1;
-            if (keyword1 != "INTO") die();
+            ss >> keyword1 >> keyword2;
+            if (keyword1 != "INTO" || keyword2 != "VALUES") die();
             ss >> name;
             if (name.empty()) die();
             if (inventories.search(name, true) == nullptr) die();
-            ss >> keyword2;
-            if (keyword2 != "VALUES") die();
             Inventory *target = inventories.search(name);
             getline(ss, line);
             stringstream cars(line);
