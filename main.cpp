@@ -106,6 +106,10 @@ public:
     string get_name() {
         return name;
     }
+
+    vector<string> get_cars() {
+        return cars;
+    }
     friend istream& operator>>(istream &ins, Inventory &other);
     // friend ostream& operator<<(ostream &outs, Inventory &other);
 }; //End of inventory
@@ -214,8 +218,14 @@ int main() {
                 trim(car);
                 if (car.empty()) die();
                 is_valid(car);
-                //if (inventories.search(car, true) != nullptr)  die();
-                target -> insert(car);
+                if (inventories.search(car, true) == nullptr) {
+                    target -> insert(car); }
+                else {
+                    Inventory *table = inventories.search(car);
+                    for (const string &new_car : table->get_cars()) {
+                        target -> insert(new_car);
+                    }
+                }
             }
         } //END INSERT
         else if (first == "SELECT") {
@@ -242,7 +252,7 @@ int main() {
                     if (keyword1 != "INNER" || keyword2 != "JOIN" || name2.empty())die();
                     Inventory *a = inventories.search(star_name);
                     Inventory *b = inventories.search(name2);
-                   // cout << a->intersect(*b) << "\n";
+                   cout << a->intersect(*b) << "\n";
                 }
             }
             else die();
