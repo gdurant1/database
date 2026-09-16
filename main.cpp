@@ -41,18 +41,6 @@ bool is_valid(const string &str) {
      }
  };
 
-// struct print {
-//     friend ostream& operator<<(ostream &outs, const Inventory &inv) {
-//         outs << inv.name << ": ";
-//         for (auto i = inv.cars.begin(); i != inv.cars.end(); ++i) {
-//             outs << *i << " ";
-//         }
-//         return outs;
-//     }
-// };
-
-
-
 class Inventory {
     vector<string> cars = {};
     string name;
@@ -117,6 +105,7 @@ class SuperSet {
     unordered_map<string, Inventory> set;
 public:
     SuperSet() : set() {}
+
     void insert(Inventory &new_inv) {
         string name = new_inv.get_name();
         if (set.find(name) == set.end()) {
@@ -132,7 +121,6 @@ public:
         if (!ignore_fail) {
             die();
         }
-
         return nullptr;
     }
 
@@ -147,9 +135,10 @@ public:
     void poset() {
         for (auto &i : set) {
             for (auto &j : set) {
-                if (i.first == j.first) {continue;}
+                if (i.first == j.first) continue;
                 Inventory *a = &i.second;
                 Inventory *b = &j.second;
+                if (a->size() == 0 || b->size() == 0) continue;
                 if (a->size() < b->size()) {
                     Inventory result = a->intersect(*b);
                     if (result.size() == a->size()) {
