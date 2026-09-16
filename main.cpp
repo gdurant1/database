@@ -152,7 +152,7 @@ public:
                 if (a->size() < b->size()) {
                     Inventory result = a->intersect(*b);
                     if (result.size() == a->size()) {
-                        cout << i.second << " " << j.second << endl;
+                        cout << i.first << " " << j.first << endl;
                     }
                 }
             }
