@@ -121,7 +121,7 @@ public:
     //It will return the inventory matching name
     //If ignore_fail is set, then it won't die on a lack of a match
     Inventory* search(string name, bool ignore_fail = false) {
-        // if (name == "MASTER") die();
+        if (name == "MASTER") die();
         auto find = set.find(name);
         if (find != set.end()) {
             return &find->second;  }
@@ -185,6 +185,7 @@ int main() {
     cout << "CREATE TABLE <NAME>\n"
      "INSERT INTO <NAME> VALUES <VIN>, <VIN>, <VIN>,...\n"
      "SELECT FROM <NAME1> UNION <NAME2>\n"
+    "SELECT FROM <NAME1> INTERSECT <NAME2>\n"
      "SELECT * FROM *\n"
      "SELECT * FROM <NAME1> INNER JOIN <NAME2>\n"
      "IS <NAME1> SUBSET <NAME2>\n"
